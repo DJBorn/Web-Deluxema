@@ -1,46 +1,35 @@
 
-function startgame(){
+function deluxema(){
 
-	// create an new instance of a pixi stage
-	var stage = new PIXI.Stage(0x66FF99);
-
-	// create a renderer instance
-	var renderer = PIXI.autoDetectRenderer(1000, 400);
-
-	// add the renderer view element to the DOM
-	document.getElementById("stage").appendChild(renderer.view);
-
-	requestAnimFrame(animate);
+	var game = new Phaser.Game(1000, 400, Phaser.AUTO, 'stage', { preload: preload, create: create, update: update, render: render });
 	
-	// create a background..
-	var background = PIXI.Sprite.fromImage("../Web-Deluxema/includes/Sprites/Map/Ace_House.png");
+	var ace = null;
 
-	// add background to stage...
-	stage.addChild(background);
-
-	// create a texture from an image path
-	var texture = PIXI.Texture.fromImage("../Web-Deluxema/includes/bunny.png");
-
-	// create a new Sprite using the texture
-	var bunny = new PIXI.Sprite(texture);
-
-	// center the sprites anchor point
-	bunny.anchor.x = 0.5;
-	bunny.anchor.y = 0.5;
-
-	// move the sprite to the center of the screen
-	bunny.position.x = 200;
-	bunny.position.y = 150;
-
-	stage.addChild(bunny);
+	function preload () {
 	
-	function animate() {
-	    requestAnimFrame(animate);
 
-	    // just for fun, let's rotate mr rabbit a little
-	    bunny.rotation += 0.1;
+			game.load.image('logo', '../Web-Deluxema/includes/Sprites/Map/Ace_House.png');
+			
+			ace = new Ace(game);
+			ace.preload();
 
-	    // render the stage
-	    renderer.render(stage);
 	}
+
+	function create () {
+	
+
+		var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'logo');
+		logo.anchor.setTo(0.5, 0.5);
+		ace.create();
+
+	}
+	
+	function update () {
+		ace.update();
+	}
+	
+	function render () {
+	}
+
+
 }

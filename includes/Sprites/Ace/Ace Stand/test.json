@@ -1,0 +1,30 @@
+{"frames": [
+
+{
+	"filename": "Ace_Stand.bmp",
+	"frame": {"x":2,"y":2,"w":204,"h":92},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":204,"h":92},
+	"sourceSize": {"w":204,"h":92},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "Ace_Stand_WB.bmp",
+	"frame": {"x":208,"y":2,"w":204,"h":92},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":204,"h":92},
+	"sourceSize": {"w":204,"h":92},
+	"pivot": {"x":0.5,"y":0.5}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "test.png",
+	"format": "RGBA8888",
+	"size": {"w":414,"h":96},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:ea771394de390dfc4eca649eca3bc5c8:b2c3c7506541ebd661b8e84fee468f2e:02ab132358d6d8b512e80119463a8329$"
+}
+}
