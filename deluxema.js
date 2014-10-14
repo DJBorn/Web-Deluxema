@@ -1,15 +1,16 @@
+var ace = null;
+var level = null;
 
 function deluxema(){
-
 	var game = new Phaser.Game(1000, 400, Phaser.AUTO, 'stage', { preload: preload, create: create, update: update, render: render });
 	
-	var ace = null;
+
 
 	function preload () {
+      game.time.advancedTiming = true;
 	
-
-			game.load.image('logo', '../Web-Deluxema/includes/Sprites/Map/Ace_House.png');
-			
+			level = new Level(game);
+			level.preload();
 			ace = new Ace(game);
 			ace.preload();
 
@@ -17,9 +18,7 @@ function deluxema(){
 
 	function create () {
 	
-
-		var logo = game.add.sprite(game.world.centerX, game.world.centerY, 'logo');
-		logo.anchor.setTo(0.5, 0.5);
+		level.create();
 		ace.create();
 
 	}
@@ -29,7 +28,10 @@ function deluxema(){
 	}
 	
 	function render () {
+    game.debug.text(game.time.fps, 2, 14, "#00ff00");
+		game.debug.body(ace.sprite);
+		game.debug.body(level.platform);
 	}
-
+	
 
 }
