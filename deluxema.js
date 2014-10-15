@@ -14,7 +14,6 @@ function deluxema(){
 			level.preload();
 			ace = new Ace(game);
 			ace.preload();
-
 	}
 
 	function create () {
@@ -25,6 +24,7 @@ function deluxema(){
 	}
 	
 	function update () {
+		level.update();
 		ace.update();
 	}
 	
