@@ -39,13 +39,10 @@ Level.prototype.create = function() {
 	
 	// Create the timer for the explosions
 	this.timer = this.game.time.create();
-
-
-	// Start the timer running - this is important!
-	// It won't start automatically, allowing you to hook it to button events and the like.
-	this.timer.start();
-		
 	
+	// Set a TimerEvent to occur after 2 seconds
+	this.timer.loop(2500, function(){game_state = state.PREPARATION;}, this);
+
 	// Scale the size (initial image is a 1x1 block)
 	ground.scale.setTo(1, 1);
 	
@@ -59,13 +56,8 @@ Level.prototype.create = function() {
 Level.prototype.update = function() {
 	if(game_state == state.EXPLOSION)
 	{
-		if(!this.timer_began)
-		{
-			// Set a TimerEvent to occur after 2 seconds
-			this.timer.loop(2500, function(){game_state = state.PREPARATION;}, this);
-			this.timer.start();
-			this.timer_began = true;
-		}
+		// Start the timer
+		this.timer.start();
 			
 		if(this.explosion_left.is_finished())
 			this.explosion_left.initiate_explosion(0, 8, 152, 222);

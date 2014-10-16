@@ -73,14 +73,14 @@ Ace.prototype.create = function() {
 	// Create an instance of the sprite using the ace sprite sheet
 	this.sprite = this.game.add.sprite(498, 348, 'ace');
 	
+	this.game.physics.enable(this.sprite, Phaser.Physics.ARCADE);
+	
 	// Set the anchor of the sprite to the center
 	this.sprite.anchor.setTo(.5, .5);
 	
+	
 	// Adjust the body size
 	this.sprite.body.setSize(28, 76, 0, 0);
-	
-	this.game.physics.startSystem(Phaser.Physics.ARCADE);
-	this.game.physics.enable(this.sprite, Phaser.Physics.ARCADE);
 	
 	// Apply physics
 	this.sprite.body.bounce.y = 0;

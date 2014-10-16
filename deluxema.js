@@ -8,24 +8,28 @@ function deluxema(){
 
 	function preload () {
       game.time.advancedTiming = true;
+			game.stage.smoothed = false;
 			game_state = state.MENU;
 			
 			level = new Level(game);
 			level.preload();
 			ace = new Ace(game);
 			ace.preload();
+			hud = new HUD(game);
+			hud.preload();
 	}
 
 	function create () {
 	
 		level.create();
 		ace.create();
-
+		hud.create();
 	}
 	
 	function update () {
 		level.update();
 		ace.update();
+		hud.update();
 	}
 	
 	function render () {
