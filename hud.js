@@ -66,10 +66,10 @@ HUD.prototype.create = function()
 HUD.prototype.update = function()
 {
 	this.timer.start();
-	if(game_state == state.MENU)
+	if(main_game.game_state == state.MENU)
 	{
 	}
-	else if(game_state == state.EXPLOSION)
+	else if(main_game.game_state == state.EXPLOSION)
 	{
 		if(!this.start_sound_played)
 		{
@@ -88,7 +88,7 @@ HUD.prototype.update = function()
 		this.controls.text = "";
 	}
 	
-	if(game_state == state.GAME)
+	if(main_game.game_state == state.GAME)
 	{
 		this.score.text = "Score: " + this.game_score;
 	}

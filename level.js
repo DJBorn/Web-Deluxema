@@ -41,7 +41,7 @@ Level.prototype.create = function() {
 	this.timer = this.game.time.create();
 	
 	// Set a TimerEvent to occur after 2 seconds
-	this.timer.loop(2500, function(){game_state = state.PREPARATION;}, this);
+	this.timer.loop(2500, function(){main_game.game_state = state.PREPARATION;}, this);
 
 	// Scale the size (initial image is a 1x1 block)
 	ground.scale.setTo(1, 1);
@@ -54,7 +54,7 @@ Level.prototype.create = function() {
 };
 
 Level.prototype.update = function() {
-	if(game_state == state.EXPLOSION)
+	if(main_game.game_state == state.EXPLOSION)
 	{
 		// Start the timer
 		this.timer.start();
@@ -66,7 +66,7 @@ Level.prototype.update = function() {
 		this.explosion_left.update(0, 8, 152, 222);
 		this.explosion_right.update(992, 1000, 152, 222);
 	}
-	if(game_state == state.PREPARATION)
+	if(main_game.game_state == state.PREPARATION)
 	{
 		this.timer_began = false;
 		this.house_breached.exists = true;

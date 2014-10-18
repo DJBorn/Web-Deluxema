@@ -1,4 +1,3 @@
-
 function Ace(game) {
 	// Main game
 	this.game = game;
@@ -129,7 +128,7 @@ Ace.prototype.sleeping = function()
 {
 	this.sprite.animations.play('sleeping');
 	if(this.enter_button.isDown)
-		game_state = state.EXPLOSION;
+		main_game.game_state = state.EXPLOSION;
 };
 
 // This function handles Ace when he is waking up from the explosion
@@ -151,7 +150,7 @@ Ace.prototype.standing_up = function()
 	if(this.preparing)
 	{
 		if(this.animation_ref.isFinished)
-			game_state = state.GAME;
+			main_game.game_state = state.GAME;
 		else if(this.animation_ref.frame == 45 && !this.portal_played)
 		{
 			this.portal_played = true;
@@ -243,14 +242,14 @@ Ace.prototype.in_game = function()
 Ace.prototype.update = function()
 {
 	// Collide ace with the platform no matter what state
-	this.game.physics.arcade.collide(this.sprite, level.platform);
-	if(game_state == state.GAME)
+	this.game.physics.arcade.collide(this.sprite, main_game.level.platform);
+	if(main_game.game_state == state.GAME)
 		this.in_game();
-	else if(game_state == state.MENU)
+	else if(main_game.game_state == state.MENU)
 		this.sleeping();
-	else if(game_state == state.EXPLOSION)
+	else if(main_game.game_state == state.EXPLOSION)
 		this.waking_up();
-	else if(game_state == state.PREPARATION)
+	else if(main_game.game_state == state.PREPARATION)
 		this.standing_up();
 };
 
