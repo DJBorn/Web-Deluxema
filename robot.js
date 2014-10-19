@@ -14,6 +14,9 @@ function Robot(game) {
 	this.animation_ref = null;
 	this.dash_timer = null;
 	
+	this.dash_started = false;
+	this.duration_started = false;
+	
 	
 	// Sound handlers
 	this.dash_sound = null;
@@ -35,7 +38,7 @@ Robot.prototype.preload = function() {
 
 Robot.prototype.create = function() {
 	// Create an instance of the sprite using the ace sprite sheet
-	this.sprite = this.game.add.sprite(20, 300, 'robot');
+	this.sprite = this.game.add.sprite(this.game.rnd.between(-250, -200) + (1450 * this.game.rnd.between(0, 1)), 300, 'robot');
 	// this.game.rnd.between(
 	
 	this.game.physics.enable(this.sprite, Phaser.Physics.ARCADE);
@@ -61,7 +64,7 @@ Robot.prototype.create = function() {
 	
 	this.sprite.animations.add('dash', [6], true);
 	
-	this.sprite.animations.add('punch', [7, 8, 9, 10, 8, 9, 10, 7], 10, false);
+	this.sprite.animations.add('punch', [7, 8, 9, 10, 8, 9, 10, 8, 9, 10, 7], 10, false);
 	
 	this.sprite.animations.add('death', [11, 12], 5, true);
 					
@@ -76,19 +79,24 @@ Robot.prototype.create = function() {
 
 Robot.prototype.dash = function()
 {
-	// Create the timer for the dash duration
-	//this.dash_duration = this.game.time.create();
-	
-	// Set a TimerEvent to occur after 2 seconds
-	//this.dash_duration.loop(3000, function(){this.move = false; this.dash_duration.destroy(); this.dashing = false; this.boosting = false;}, this);
-	
-	//this.dash_duration.start();
-	this.game.time.events.add(3000, function(){this.move = false; this.dashing = false; this.boosting = false; this.punching = false;}, this);
+	if(!this.duration_started)
+	{
+		this.duration_started = true;
+		
+		// Create the timer for the dash duration
+		this.dash_duration = this.game.time.create();
+		
+		// Set a TimerEvent to occur after 2 seconds
+		this.dash_duration.add(1200, function(){this.duration_started = false; this.move = false; this.dashing = false; this.boosting = false; this.punching = false;}, this);
+		
+		this.dash_duration.start();
+		//this.best = this.game.time.events.add(1000, function(){this.move = false; this.dashing = false; this.boosting = false; this.punching = false;}, this);
+	}
 	
 	if(this.sprite.scale.x > 0)
-		this.sprite.body.velocity.x = 250;
+		this.sprite.body.velocity.x = 350;
 	else
-		this.sprite.body.velocity.x = -250;
+		this.sprite.body.velocity.x = -350;
 	
 	if(this.punching && this.animation_ref.isFinished)
 	{
@@ -135,14 +143,19 @@ Robot.prototype.update = function()
 		{
 			this.sprite.animations.play('stand');
 		
-			// Create the timer for the dash
-			//this.dash_timer = this.game.time.create();
-			
-			// Set a TimerEvent to occur after 2 seconds
-			//this.dash_timer.loop(3000, function(){this.move = true; this.dash_timer.destroy();}, this);
-			
-			//this.dash_timer.start();
-			this.game.time.events.add(3000, function(){this.move = true;}, this);
+			if(!this.dash_started)
+			{
+				this.dash_started = true;
+		
+				// Create the timer for the dash
+				this.dash_timer = this.game.time.create();
+				
+				// Set a TimerEvent to occur after 2 seconds
+				this.dash_timer.add(3000, function(){this.dash_started = false; this.move = true; }, this);
+				
+				this.dash_timer.start();
+				//this.test = this.game.time.events.add(3000, function(){this.move = true;}, this);
+			}
 		}
 		else
 		{
