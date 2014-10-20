@@ -13,7 +13,7 @@ Level.prototype.preload = function() {
 	// Load the background for the level
 	this.game.load.image('ace_house', '../Web-Deluxema/includes/Sprites/Map/Ace_House.png');
 	this.game.load.image('ace_house_breached', '../Web-Deluxema/includes/Sprites/Map/Ace_House_Breached.png');
-  this.game.load.image('ground', '../Web-Deluxema/includes/Sprites/Map/platform.png');
+  this.game.load.image('ground', '../Web-Deluxema/includes/Sprites/Map/ground.png');
 	this.explosion_left.preload();
 	this.explosion_right.preload();
 };
@@ -30,7 +30,7 @@ Level.prototype.create = function() {
 	this.platform = this.game.add.group();
 	
 	// Create the ground
-	var ground = this.platform.create(-200, this.game.world.height - 14, 'ground');
+	var ground = this.platform.create(-500, this.game.world.height - 14, 'ground');
 	this.game.physics.enable(ground, Phaser.Physics.ARCADE);
 
 	// Create the explosion for the initial animation

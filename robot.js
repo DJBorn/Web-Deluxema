@@ -38,7 +38,7 @@ Robot.prototype.preload = function() {
 
 Robot.prototype.create = function() {
 	// Create an instance of the sprite using the ace sprite sheet
-	this.sprite = this.game.add.sprite(this.game.rnd.between(-250, -200) + (1450 * this.game.rnd.between(0, 1)), 300, 'robot');
+	this.sprite = this.game.add.sprite(this.game.rnd.between(-300, -250) + (1550 * this.game.rnd.between(0, 1)), 300, 'robot');
 	// this.game.rnd.between(
 	
 	this.game.physics.enable(this.sprite, Phaser.Physics.ARCADE);
@@ -87,7 +87,7 @@ Robot.prototype.dash = function()
 		this.dash_duration = this.game.time.create();
 		
 		// Set a TimerEvent to occur after 2 seconds
-		this.dash_duration.add(1200, function(){this.duration_started = false; this.move = false; this.dashing = false; this.boosting = false; this.punching = false;}, this);
+		this.dash_duration.add(this.game.rnd.between(1000, 1200), function(){this.duration_started = false; this.move = false; this.dashing = false; this.boosting = false; this.punching = false;}, this);
 		
 		this.dash_duration.start();
 		//this.best = this.game.time.events.add(1000, function(){this.move = false; this.dashing = false; this.boosting = false; this.punching = false;}, this);
@@ -128,6 +128,8 @@ Robot.prototype.update = function()
 	// Collide the robot with the platform no matter what state
 	this.game.physics.arcade.collide(this.sprite, main_game.level.platform);
 	
+	//this.game.physics.arcade.collide(this.sprite, main_game.ace.attack);
+	
 	// Set the default velocity to 0
 	this.sprite.body.velocity.x = 0;
 	if(!this.move)
@@ -151,7 +153,7 @@ Robot.prototype.update = function()
 				this.dash_timer = this.game.time.create();
 				
 				// Set a TimerEvent to occur after 2 seconds
-				this.dash_timer.add(3000, function(){this.dash_started = false; this.move = true; }, this);
+				this.dash_timer.add(this.game.rnd.between(3000, 5000), function(){this.dash_started = false; this.move = true; }, this);
 				
 				this.dash_timer.start();
 				//this.test = this.game.time.events.add(3000, function(){this.move = true;}, this);

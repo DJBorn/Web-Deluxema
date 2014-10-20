@@ -5,6 +5,9 @@ function Ace(game) {
 	// Sprite holder
 	this.sprite = null;
 	
+	// Attack hit box
+	this.attack = null;
+	
 	// Input handlers
 	this.cursors = null;
 	this.jump_button = null;
@@ -60,6 +63,7 @@ Ace.prototype.input = function(key)
 Ace.prototype.preload = function() {
 	// Load the sprite sheet of Ace
 	this.game.load.spritesheet('ace', '../Web-Deluxema/includes/Sprites/Ace/Ace_SpriteSheet_252x120.png', 252, 120, 57);
+	this.game.load.image('attack', '../Web-Deluxema/includes/Sprites/pixel.png');
 	
 	// Load the sound effects of Ace
 	this.game.load.audio('jump', '../Web-Deluxema/includes/Sounds/Effects/Ace/Ace_Jump.wav');
@@ -72,11 +76,18 @@ Ace.prototype.create = function() {
 	// Create an instance of the sprite using the ace sprite sheet
 	this.sprite = this.game.add.sprite(498, 348, 'ace');
 	
+	// Create Ace's attack hit box
+	this.attack = this.game.add.sprite(0, 0, 'attack');
+	this.attack.scale.setTo(120, 80);
+	
 	this.game.physics.enable(this.sprite, Phaser.Physics.ARCADE);
+	this.game.physics.enable(this.attack, Phaser.Physics.ARCADE);
 	
-	// Set the anchor of the sprite to the center
+	// Set the anchor of the sprite and attack to the center
 	this.sprite.anchor.setTo(.5, .5);
+	this.attack.anchor.setTo(.5, .5);
 	
+	this.attack.body.immovable = true;
 	
 	// Adjust the body size
 	this.sprite.body.setSize(28, 76, 0, 0);
@@ -175,6 +186,7 @@ Ace.prototype.in_game = function()
 {
 	
 	this.sprite.body.velocity.x = 0;
+	this.attack.exists = false;
 	
 	// animation handler
 	if(this.air_slicing)
@@ -189,6 +201,12 @@ Ace.prototype.in_game = function()
 	{
 		if(this.animation_ref.isFinished)
 			this.slicing = false;
+		else if(this.animation_ref.frame == 8)
+		{
+			this.attack.exists = true;
+			this.attack.x = this.sprite.x + 50 * this.sprite.scale.x;
+			this.attack.y = this.sprite.y - 10;
+		}
 	}
 	else if (!this.sprite.body.touching.down) 
 	{
