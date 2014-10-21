@@ -201,7 +201,13 @@ Ace.prototype.in_game = function()
 		{
 			this.air_slicing = false;
 			this.slice_sound.pause();
-			}
+		}
+		else if(this.air_slicing_ref.frame == 28)
+		{
+			this.attack.x = this.sprite.x + 60 * this.sprite.scale.x;
+			this.attack.y = this.sprite.y - 10;
+			this.attack.exists = true;
+		}
 	}
 	else if(this.slicing)
 	{
@@ -209,7 +215,7 @@ Ace.prototype.in_game = function()
 		{
 			this.slicing = false;
 		}
-		else if(this.slicing_ref.frame >= 8)//8 <= this.animation_ref.frame && this.animation_ref.frame <= 10)
+		else if(this.slicing_ref.frame == 8)
 		{
 			this.attack.x = this.sprite.x + 60 * this.sprite.scale.x;
 			this.attack.y = this.sprite.y - 10;
