@@ -4,6 +4,7 @@ function Robot(game) {
 	
 	// Sprite holder
 	this.sprite = null;
+	this.attack = null;
 	
 	// Animation state handlers
 	this.move = false;
@@ -12,8 +13,11 @@ function Robot(game) {
 	this.hovering = false;
 	this.punching = false;
 	this.destroyed = false;
-	this.animation_ref = null;
+	this.punch_ref = null;
+	this.boost_ref = null;
 	this.dash_timer = null;
+	
+	this.attacking = false;
 	
 	this.dash_started = false;
 	this.duration_started = false;
@@ -33,6 +37,7 @@ Robot.prototype.preload = function() {
 
 	// Load the sprite sheet of the robot
 	this.game.load.spritesheet('robot', '../Web-Deluxema/includes/Sprites/Robot/Robot_Spritesheet_120x110.png', 120, 110, 13);
+	this.game.load.image('attack', '../Web-Deluxema/includes/Sprites/pixel.png');
 	
 	// Load the explosion
 	this.explosion.preload();
@@ -45,12 +50,17 @@ Robot.prototype.preload = function() {
 Robot.prototype.create = function() {
 	// Create an instance of the sprite using the ace sprite sheet
 	this.sprite = this.game.add.sprite(this.game.rnd.between(-300, -250) + (1550 * this.game.rnd.between(0, 1)), 390, 'robot');
-	// this.game.rnd.between(
+
+	// Create the robot's attack hit box
+	this.attack = this.game.add.sprite(0, 0, 'attack');
+	this.attack.scale.setTo(70, 30);
 	
 	this.game.physics.enable(this.sprite, Phaser.Physics.ARCADE);
+	this.game.physics.enable(this.attack, Phaser.Physics.ARCADE);
 	
 	// Set the anchor of the sprite to the center
 	this.sprite.anchor.setTo(.5, 1);
+	this.attack.anchor.setTo(.5, .5);
 	
 	
 	// Adjust the body size
@@ -66,11 +76,11 @@ Robot.prototype.create = function() {
 	// Add the animations of the robot
 	this.sprite.animations.add('stand', [0, 1, 2, 1], 5, true);
 	
-	this.sprite.animations.add('boost', [3, 4, 5], 15, false);
+	this.sprite.animations.add('boost', [3, 4, 5], 25, false);
 	
 	this.sprite.animations.add('dash', [6], true);
 	
-	this.sprite.animations.add('punch', [7, 8, 9, 10, 8, 9, 10, 8, 9, 10, 7], 10, false);
+	this.sprite.animations.add('punch', [7, 8, 9, 10, 8, 9, 10, 7], 20, false);
 	
 	this.sprite.animations.add('death', [11, 12], 5, true);
 					
@@ -102,31 +112,37 @@ Robot.prototype.dash = function()
 	}
 	
 	if(this.sprite.scale.x > 0)
-		this.sprite.body.velocity.x = 350;
+		this.sprite.body.velocity.x = 300;
 	else
-		this.sprite.body.velocity.x = -350;
+		this.sprite.body.velocity.x = -300;
 	
-	if(this.punching && this.animation_ref.isFinished)
+	if(this.punching)
 	{
-		this.sprite.animations.play('dash');
+		if(this.punch_ref.isFinished)
+		{
+			this.sprite.animations.play('dash');
+		}
+		else if(8 <= this.punch_ref.frame && this.punch_ref.frame <= 10)
+		{
+			this.attacking = true;
+		}
 	}
-		
 	else if(this.dashing)
 	{
-		if(Math.abs(this.sprite.body.x - main_game.ace.sprite.body.x) < 100)
+		if(Math.abs(this.sprite.body.x - main_game.ace.sprite.body.x) < 150)
 		{
-			this.animation_ref = this.sprite.animations.play('punch');
+			this.punch_ref = this.sprite.animations.play('punch');
 			this.punching = true;
 		}
 	}
-	else if(this.boosting && this.animation_ref.isFinished)
+	else if(this.boosting && this.boost_ref.isFinished)
 	{
 		this.sprite.animations.play('dash');
 		this.dashing = true;
 	}
 	if(!this.boosting)
 	{
-		this.animation_ref = this.sprite.animations.play('boost');
+		this.boost_ref = this.sprite.animations.play('boost');
 		this.boosting = true;
 	}
 };
@@ -148,11 +164,16 @@ Robot.prototype.update = function()
 {
 	// Collide the robot with the platform no matter what state
 	this.game.physics.arcade.collide(this.sprite, main_game.level.platform);
-
+	this.attacking = false;
+	
+	// Update attack hitbox position
+	this.attack.x = this.sprite.x + 10 * this.sprite.scale.x;
+	this.attack.y = this.sprite.y - 62;
+	
 	if(main_game.game_state == state.GAME)
 	{	
 		// Check if the robot was hit by ace
-		if(Phaser.Rectangle.intersects(this.sprite.body, main_game.ace.attack.body) && main_game.ace.attack.exists && !this.destroyed)
+		if(Phaser.Rectangle.intersects(this.sprite.body, main_game.ace.attack.body) && main_game.ace.attacking && !this.destroyed)
 		{
 			this.sprite.body.velocity.y = -200;
 			this.sprite.body.velocity.x = 250 * main_game.ace.sprite.scale.x;
@@ -194,8 +215,8 @@ Robot.prototype.update = function()
 					// Create the timer for the dash
 					this.dash_timer = this.game.time.create();
 					
-					// Set a TimerEvent to occur after 2 seconds
-					this.dash_timer.add(this.game.rnd.between(3000, 5000), function(){this.dash_started = false; this.move = true; this.dash_sound.play(); }, this);
+					// Set the delay so the robot will dash between 2 to 6 seconds
+					this.dash_timer.add(this.game.rnd.between(2000, 6000), function(){this.dash_started = false; this.move = true; this.dash_sound.play(); }, this);
 					
 					this.dash_timer.start();
 					//this.test = this.game.time.events.add(3000, function(){this.move = true;}, this);

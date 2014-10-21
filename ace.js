@@ -21,6 +21,9 @@ function Ace(game) {
 	this.preparing = false;
 	this.air_slicing = false;
 	this.slicing = false;
+	this.hurt = false;
+	this.attacking = false;
+	
 	this.portal_ref = null;
 	this.waking_ref = null;
 	this.preparing_ref = null;
@@ -34,6 +37,7 @@ function Ace(game) {
 	this.jump_sound = null;
 	this.slice_sound = null;
 	this.portal_sound = null;
+	this.hurt_sound = null;
 	this.portal_played = false;
 	this.grab_played = false;
 };
@@ -76,6 +80,7 @@ Ace.prototype.preload = function() {
 	this.game.load.audio('jump', '../Web-Deluxema/includes/Sounds/Effects/Ace/Ace_Jump.wav');
 	this.game.load.audio('slice', '../Web-Deluxema/includes/Sounds/Effects/Ace/Ace_Slice.wav');
 	this.game.load.audio('portal', '../Web-Deluxema/includes/Sounds/Effects/Ace/Ace_Portal.wav');
+	this.game.load.audio('hurt', '../Web-Deluxema/includes/Sounds/Effects/Ace/Ace_Hit.wav');
 };
 
 
@@ -113,9 +118,9 @@ Ace.prototype.create = function() {
 	
 	this.sprite.animations.add('hurt', [24], true);
 	
-	this.sprite.animations.add('slice', [5, 6, 7, 8, 9, 10, 11, 12, 13, 6], 30, false);
+	this.sprite.animations.add('slice', [5, 6, 7, 8, 9, 10, 11, 12, 13, 6], 35, false);
 	
-	this.sprite.animations.add('jump_slice', [26, 27, 28, 29, 30, 31, 32, 33, 26], 30, false);
+	this.sprite.animations.add('jump_slice', [26, 27, 28, 29, 30, 31, 32, 33, 26], 35, false);
 	
 	this.sprite.animations.add('run', [14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 15, true);
 	
@@ -133,6 +138,7 @@ Ace.prototype.create = function() {
 	this.jump_sound = this.game.add.audio('jump', 0.5);
 	this.slice_sound = this.game.add.audio('slice', 0.3);
 	this.portal_sound = this.game.add.audio('portal', 0.3);
+	this.hurt_sound = this.game.add.audio('hurt', 0.3);
 	
 	// Create the input handlers
 	this.cursors = this.game.input.keyboard.createCursorKeys();
@@ -187,12 +193,45 @@ Ace.prototype.standing_up = function()
 	}
 };
 
+Ace.prototype.is_hurt = function()
+{
+	if(this.hurt)
+	{
+		if(this.sprite.body.touching.down)
+			this.hurt = false;
+		this.sprite.animations.play('hurt');
+	}
+	// Check if Ace was hit by a robot
+	for(var i = 0; i < main_game.robot_amount; i++)
+	{
+		if(Phaser.Rectangle.intersects(this.sprite.body, main_game.robots[i].attack.body) && main_game.robots[i].attacking && !this.hurt)
+		{
+			this.sprite.body.velocity.y = -650;
+			this.sprite.body.velocity.x = 300 * main_game.robots[i].sprite.scale.x;
+			this.hurt = true;
+			this.hurt_sound.play();
+		}
+	}
+}
+
 
 // This function handles Ace during gameplay
 Ace.prototype.in_game = function()
 {
 	this.sprite.body.velocity.x = 0;
-	this.attack.exists = false;
+	this.attacking = false;
+	
+	// Update attack hitbox position
+	if(this.sprite.body.touching.down)
+	{
+		this.attack.x = this.sprite.x + 60 * this.sprite.scale.x;
+		this.attack.y = this.sprite.y - 10;
+	}
+	else
+	{
+		this.attack.x = this.sprite.x + 40 * this.sprite.scale.x;
+		this.attack.y = this.sprite.y - 20;
+	}
 	
 	// animation handler
 	if(this.air_slicing)
@@ -204,9 +243,7 @@ Ace.prototype.in_game = function()
 		}
 		else if(this.air_slicing_ref.frame == 28)
 		{
-			this.attack.x = this.sprite.x + 40 * this.sprite.scale.x;
-			this.attack.y = this.sprite.y - 20;
-			this.attack.exists = true;
+			this.attacking = true;
 		}
 	}
 	else if(this.slicing)
@@ -217,9 +254,7 @@ Ace.prototype.in_game = function()
 		}
 		else if(this.slicing_ref.frame == 8)
 		{
-			this.attack.x = this.sprite.x + 60 * this.sprite.scale.x;
-			this.attack.y = this.sprite.y - 10;
-			this.attack.exists = true;
+			this.attacking = true;
 		}
 	}
 	else if (!this.sprite.body.touching.down) 
@@ -275,8 +310,13 @@ Ace.prototype.update = function()
 {
 	// Collide ace with the platform no matter what state
 	this.game.physics.arcade.collide(this.sprite, main_game.level.platform);
+	
 	if(main_game.game_state == state.GAME)
-		this.in_game();
+	{
+		this.is_hurt();
+		if(!this.hurt)
+			this.in_game();
+	}
 	else if(main_game.game_state == state.MENU)
 		this.sleeping();
 	else if(main_game.game_state == state.EXPLOSION)
