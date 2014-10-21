@@ -21,7 +21,14 @@ function Ace(game) {
 	this.preparing = false;
 	this.air_slicing = false;
 	this.slicing = false;
-	this.animation_ref = null;
+	this.portal_ref = null;
+	this.waking_ref = null;
+	this.preparing_ref = null;
+	this.slicing_ref = null;
+	this.air_slicing_ref = null;
+	
+	this.slice_timer = null;
+	this.slice_timer_started = false;
 	
 	// Sound handlers
 	this.jump_sound = null;
@@ -78,7 +85,7 @@ Ace.prototype.create = function() {
 	
 	// Create Ace's attack hit box
 	this.attack = this.game.add.sprite(0, 0, 'attack');
-	this.attack.scale.setTo(120, 80);
+	this.attack.scale.setTo(130, 80);
 	
 	this.game.physics.enable(this.sprite, Phaser.Physics.ARCADE);
 	this.game.physics.enable(this.attack, Phaser.Physics.ARCADE);
@@ -146,11 +153,11 @@ Ace.prototype.sleeping = function()
 Ace.prototype.waking_up = function()
 {
 	if(this.waking)
-		if(this.animation_ref.isFinished)
+		if(this.waking_ref.isFinished)
 			this.sprite.animations.play('sitting');
 	if(!this.waking)
 	{
-		this.animation_ref = this.sprite.animations.play('waking_up');
+		this.waking_ref = this.sprite.animations.play('waking_up');
 		this.waking = true;
 	}
 };
@@ -160,14 +167,14 @@ Ace.prototype.standing_up = function()
 {
 	if(this.preparing)
 	{
-		if(this.animation_ref.isFinished)
+		if(this.preparing_ref.isFinished)
 			main_game.game_state = state.GAME;
-		else if(this.animation_ref.frame == 45 && !this.portal_played)
+		else if(this.preparing_ref.frame == 45 && !this.portal_played)
 		{
 			this.portal_played = true;
 			this.portal_sound.play();
 		}
-		else if(this.animation_ref.frame == 52 && !this.grab_played)
+		else if(this.preparing_ref.frame == 52 && !this.grab_played)
 		{
 			this.grab_played = true;
 			this.jump_sound.play();
@@ -175,7 +182,7 @@ Ace.prototype.standing_up = function()
 	}
 	if(!this.preparing)
 	{
-		this.animation_ref = this.sprite.animations.play('standing_up');
+		this.preparing_ref = this.sprite.animations.play('standing_up');
 		this.preparing = true;
 	}
 };
@@ -184,14 +191,13 @@ Ace.prototype.standing_up = function()
 // This function handles Ace during gameplay
 Ace.prototype.in_game = function()
 {
-	
 	this.sprite.body.velocity.x = 0;
 	this.attack.exists = false;
 	
 	// animation handler
 	if(this.air_slicing)
 	{
-		if(this.animation_ref.isFinished || this.sprite.body.touching.down)
+		if(this.air_slicing_ref.isFinished || this.sprite.body.touching.down)
 		{
 			this.air_slicing = false;
 			this.slice_sound.pause();
@@ -199,20 +205,22 @@ Ace.prototype.in_game = function()
 	}
 	else if(this.slicing)
 	{
-		if(this.animation_ref.isFinished)
-			this.slicing = false;
-		else if(this.animation_ref.frame == 8)
+		if(this.slicing_ref.isFinished)
 		{
-			this.attack.exists = true;
-			this.attack.x = this.sprite.x + 50 * this.sprite.scale.x;
+			this.slicing = false;
+		}
+		else if(this.slicing_ref.frame >= 8)//8 <= this.animation_ref.frame && this.animation_ref.frame <= 10)
+		{
+			this.attack.x = this.sprite.x + 60 * this.sprite.scale.x;
 			this.attack.y = this.sprite.y - 10;
+			this.attack.exists = true;
 		}
 	}
 	else if (!this.sprite.body.touching.down) 
 	{
 		if(this.input("x"))
 		{
-			this.animation_ref = this.sprite.animations.play('jump_slice');
+			this.air_slicing_ref = this.sprite.animations.play('jump_slice');
 			this.air_slicing = true;
 			this.slice_sound.play();
 		}
@@ -221,7 +229,7 @@ Ace.prototype.in_game = function()
 	}
 	else if (this.input("x"))
 	{
-		this.animation_ref = this.sprite.animations.play('slice');
+		this.slicing_ref = this.sprite.animations.play('slice');
 		this.slicing = true;
 		this.slice_sound.play();
 	}
