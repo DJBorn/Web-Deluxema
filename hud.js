@@ -8,7 +8,6 @@ function HUD(game) {
 	this.press_enter = null;
 	this.controls = null;
 	this.score = null;
-	this.game_score = 0;
 	
 	this.timer = null;
 	
@@ -90,7 +89,7 @@ HUD.prototype.update = function()
 	
 	if(main_game.game_state == state.GAME)
 	{
-		this.score.text = "Score: " + this.game_score;
+		this.score.text = "Score: " + main_game.game_score;
 	}
 	
 };

@@ -4,7 +4,8 @@ var main_game = {
 	level: null,
 	hud: null,
 	game_state: null,
-	robot_amount: 5
+	robot_amount: 5,
+	game_score: 0
 };
 
 function deluxema(){

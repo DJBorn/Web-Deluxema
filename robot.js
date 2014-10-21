@@ -158,6 +158,7 @@ Robot.prototype.update = function()
 			this.sprite.body.velocity.x = 250 * main_game.ace.sprite.scale.x;
 			this.destroyed = true;
 			this.death_sound.play();
+			main_game.game_score++;
 		}
 		
 		else if(this.destroyed)
