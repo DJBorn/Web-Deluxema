@@ -56,7 +56,7 @@ function deluxema(){
 		game.debug.body(main_game.ace.attack);
 		for(var i = 0; i < main_game.robot_amount; i++)
 		{
-			//game.debug.body(main_game.robots[i].sprite);
+			game.debug.body(main_game.robots[i].sprite);
 		}
 		game.debug.body(main_game.level.platform);
 	}

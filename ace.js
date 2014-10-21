@@ -85,7 +85,7 @@ Ace.prototype.create = function() {
 	
 	// Create Ace's attack hit box
 	this.attack = this.game.add.sprite(0, 0, 'attack');
-	this.attack.scale.setTo(130, 80);
+	this.attack.scale.setTo(130, 60);
 	
 	this.game.physics.enable(this.sprite, Phaser.Physics.ARCADE);
 	this.game.physics.enable(this.attack, Phaser.Physics.ARCADE);
@@ -204,8 +204,8 @@ Ace.prototype.in_game = function()
 		}
 		else if(this.air_slicing_ref.frame == 28)
 		{
-			this.attack.x = this.sprite.x + 60 * this.sprite.scale.x;
-			this.attack.y = this.sprite.y - 10;
+			this.attack.x = this.sprite.x + 40 * this.sprite.scale.x;
+			this.attack.y = this.sprite.y - 20;
 			this.attack.exists = true;
 		}
 	}
