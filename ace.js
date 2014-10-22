@@ -30,9 +30,6 @@ function Ace(game) {
 	this.slicing_ref = null;
 	this.air_slicing_ref = null;
 	
-	this.slice_timer = null;
-	this.slice_timer_started = false;
-	
 	// Sound handlers
 	this.jump_sound = null;
 	this.slice_sound = null;

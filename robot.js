@@ -219,7 +219,6 @@ Robot.prototype.update = function()
 					this.dash_timer.add(this.game.rnd.between(2000, 6000), function(){this.dash_started = false; this.move = true; this.dash_sound.play(); }, this);
 					
 					this.dash_timer.start();
-					//this.test = this.game.time.events.add(3000, function(){this.move = true;}, this);
 				}
 			}
 			else

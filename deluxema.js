@@ -52,12 +52,12 @@ function deluxema(){
 	
 	function render () {
     game.debug.text(game.time.fps, 2, 14, "#00ff00");
-		//game.debug.body(main_game.ace.sprite);
-		//game.debug.body(main_game.ace.attack);
+		game.debug.body(main_game.ace.sprite);
+		game.debug.body(main_game.ace.attack);
 		for(var i = 0; i < main_game.robot_amount; i++)
 		{
-			//game.debug.body(main_game.robots[i].sprite);
-			//game.debug.body(main_game.robots[i].attack);
+			game.debug.body(main_game.robots[i].sprite);
+			game.debug.body(main_game.robots[i].attack);
 		}
 		game.debug.body(main_game.level.platform);
 	}
