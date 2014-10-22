@@ -90,7 +90,7 @@ HUD.prototype.handle_sparkle = function()
 {		
 	for(var i = 0; i < 3; i++)
 	{
-		this.sparkle[i].angle += 10;
+		this.sparkle[i].angle += 8;
 		if(!this.sparkling[i])
 		{
 			this.sparkle[i].exists = true;

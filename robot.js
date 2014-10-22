@@ -108,7 +108,6 @@ Robot.prototype.dash = function()
 		this.dash_duration.add(this.game.rnd.between(1000, 1200), function(){this.duration_started = false; this.move = false; this.dashing = false; this.boosting = false; this.punching = false;}, this);
 		
 		this.dash_duration.start();
-		//this.best = this.game.time.events.add(1000, function(){this.move = false; this.dashing = false; this.boosting = false; this.punching = false;}, this);
 	}
 	
 	if(this.sprite.scale.x > 0)
