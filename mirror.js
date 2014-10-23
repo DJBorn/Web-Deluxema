@@ -8,6 +8,7 @@ function Mirror(game) {
 	this.equilibrium = 192;
 	this.frequency = 4;
 	this.speed = 5;
+	this.life = 1;
 	this.velocity = this.speed;
 };
 
@@ -37,13 +38,13 @@ Mirror.prototype.create = function()
 	this.sprite.body.gravity.y = 0;
 
 	// Add the animations of the Mirror
-	this.sprite.animations.add('mirror1', [0, 1, 2, 3, 4, 3, 2, 1], 3, true);
+	this.sprite.animations.add('mirror1', [2, 3, 4, 3, 2, 1, 0, 1], 3, true);
 
-	this.sprite.animations.add('mirror2', [5, 6, 7, 8, 9, 8, 7, 6], 3, true);
+	this.sprite.animations.add('mirror2', [7, 8, 9, 8, 7, 6, 5, 6], 3, true);
 
-	this.sprite.animations.add('mirror3', [10, 11, 12, 13, 14, 13, 12, 11], 3, true);
+	this.sprite.animations.add('mirror3', [12, 13, 14, 13, 12, 11, 10, 11], 3, true);
 
-	this.sprite.animations.add('mirror4', [15, 16, 17, 18, 19, 18, 17, 16], 3, true);
+	this.sprite.animations.add('mirror4', [17, 18, 19, 18, 17, 16, 15, 16], 3, true);
 
 	this.sprite.animations.add('mirror5', [20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], 3, false);
 	
@@ -63,5 +64,6 @@ Mirror.prototype.oscillate = function()
 Mirror.prototype.update = function()
 {
 	this.oscillate();
+	this.sprite.animations.play('mirror'+this.life);
 };
 	
