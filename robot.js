@@ -80,7 +80,7 @@ Robot.prototype.create = function() {
 	
 	this.sprite.animations.add('dash', [6], true);
 	
-	this.sprite.animations.add('punch', [7, 8, 9, 10, 8, 9, 10, 7], 20, false);
+	this.sprite.animations.add('punch', [7, 8, 9, 10, 8, 9, 10, 7], 15, false);
 	
 	this.sprite.animations.add('death', [11, 12], 5, true);
 					
