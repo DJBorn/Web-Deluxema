@@ -157,7 +157,7 @@ Robot.prototype.adjust_direction = function()
 		else
 			this.sprite.scale.x = -1;
 	}
-}
+};
 
 Robot.prototype.update = function()
 {

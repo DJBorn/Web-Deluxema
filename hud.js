@@ -53,7 +53,7 @@ HUD.prototype.preload = function()
 HUD.prototype.create = function()
 {
 	// Create the title
-	this.title = this.game.add.sprite(this.game.world.centerX, 104, 'title');
+	this.title = this.game.add.sprite(this.game.world.centerX, 102, 'title');
 	this.title.anchor.setTo(0.5, 0.5);
 	
 	// Create the sparkles
@@ -73,7 +73,7 @@ HUD.prototype.create = function()
 	}
 
 	// Create the text handlers
-	this.press_enter = this.game.add.text(this.game.world.centerX, 260, "PRESS ENTER", this.style);
+	this.press_enter = this.game.add.text(this.game.world.centerX, 270, "PRESS ENTER", this.style);
 	this.press_enter.anchor.setTo(0.5, 0.5);
 	
 	this.controls = this.game.add.text(this.game.world.centerX, 390, "Z: Jump  X: Attack  Arrows: Run", this.style);

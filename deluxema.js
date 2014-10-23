@@ -1,6 +1,7 @@
 var main_game = {
 	ace: null,
 	robots: [],
+	mirror: null,
 	level: null,
 	hud: null,
 	game_state: null,
@@ -18,6 +19,8 @@ function deluxema(){
 		
 		main_game.level = new Level(game);
 		main_game.level.preload();
+		main_game.mirror = new Mirror(game);
+		main_game.mirror.preload();
 		for(var i = 0; i < main_game.robot_amount; i++)
 		{
 			main_game.robots[i] = new Robot(game);
@@ -32,6 +35,7 @@ function deluxema(){
 	function create () {
 	
 		main_game.level.create();
+		main_game.mirror.create();
 		for(var i = 0; i < main_game.robot_amount; i++)
 		{
 			main_game.robots[i].create();
@@ -42,6 +46,7 @@ function deluxema(){
 	
 	function update () {
 		main_game.level.update();
+		main_game.mirror.update();
 		for(var i = 0; i < main_game.robot_amount; i++)
 		{
 			main_game.robots[i].update();
@@ -54,6 +59,7 @@ function deluxema(){
     game.debug.text(game.time.fps, 2, 14, "#00ff00");
 		game.debug.body(main_game.ace.sprite);
 		game.debug.body(main_game.ace.attack);
+		game.debug.body(main_game.mirror.sprite);
 		for(var i = 0; i < main_game.robot_amount; i++)
 		{
 			game.debug.body(main_game.robots[i].sprite);
