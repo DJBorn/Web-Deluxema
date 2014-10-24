@@ -3,8 +3,8 @@ function Level(game) {
 	this.house = null;
 	this.house_breached = null;
 	this.platform = null;
-	this.explosion_left = new Explosion(this.game);
-	this.explosion_right = new Explosion(this.game);
+	this.explosion_left = new Explosion(game);
+	this.explosion_right = new Explosion(game);
 	this.timer = null;
 	this.timer_begin = false;
 };

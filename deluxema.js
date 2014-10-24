@@ -2,10 +2,11 @@ var main_game = {
 	ace: null,
 	robots: [],
 	mirror: null,
+	missile: null,
 	level: null,
 	hud: null,
 	game_state: null,
-	robot_amount: 5,
+	robot_amount: 10,
 	game_score: 0
 };
 
@@ -19,12 +20,15 @@ function deluxema(){
 		
 		main_game.level = new Level(game);
 		main_game.level.preload();
+		main_game.missile = new Missile(game);
+		main_game.missile.preload();
 		main_game.mirror = new Mirror(game);
 		main_game.mirror.preload();
 		for(var i = 0; i < main_game.robot_amount; i++)
 		{
 			main_game.robots[i] = new Robot(game);
 			main_game.robots[i].preload();
+			main_game.robots[i].active = true;
 		}
 		main_game.ace = new Ace(game);
 		main_game.ace.preload();
@@ -32,10 +36,11 @@ function deluxema(){
 		main_game.hud.preload();
 	}
 
-	function create () {
-	
+	function create ()
+	{
 		main_game.level.create();
 		main_game.mirror.create();
+		main_game.missile.create();
 		for(var i = 0; i < main_game.robot_amount; i++)
 		{
 			main_game.robots[i].create();
@@ -44,9 +49,12 @@ function deluxema(){
 		main_game.hud.create();
 	}
 	
-	function update () {
+	function update ()
+	{
+		robot_activation();
 		main_game.level.update();
 		main_game.mirror.update();
+		main_game.missile.update();
 		for(var i = 0; i < main_game.robot_amount; i++)
 		{
 			main_game.robots[i].update();
