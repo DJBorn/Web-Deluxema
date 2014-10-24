@@ -6,7 +6,7 @@ var main_game = {
 	level: null,
 	hud: null,
 	game_state: null,
-	robot_amount: 10,
+	robot_amount: 15,
 	game_score: 0
 };
 
@@ -28,8 +28,10 @@ function deluxema(){
 		{
 			main_game.robots[i] = new Robot(game);
 			main_game.robots[i].preload();
-			main_game.robots[i].active = true;
 		}
+		main_game.robots[0].active = true;
+		main_game.robots[1].active = true;
+		main_game.robots[2].active = true;
 		main_game.ace = new Ace(game);
 		main_game.ace.preload();
 		main_game.hud = new HUD(game);
@@ -68,13 +70,11 @@ function deluxema(){
 		game.debug.body(main_game.ace.sprite);
 		game.debug.body(main_game.ace.attack);
 		game.debug.body(main_game.mirror.sprite);
+		game.debug.body(main_game.missile.sprite);
 		for(var i = 0; i < main_game.robot_amount; i++)
 		{
 			game.debug.body(main_game.robots[i].sprite);
 			game.debug.body(main_game.robots[i].attack);
 		}
-		game.debug.body(main_game.level.platform);
 	}
-	
-
 }

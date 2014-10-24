@@ -13,6 +13,8 @@ function Missile(game)
 	this.exploding = false;
 	this.explode_playing = false;
 	this.warned = false;
+	this.destroyed = false;
+	CC = null;
 	this.exploding_ref = null;
 	
 	this.explosion = new Explosion(game);
@@ -40,6 +42,9 @@ Missile.prototype.preload = function()
 	this.game.load.audio('warning_sound', '../Web-Deluxema/includes/Sounds/Effects/Warning.wav');
 	this.game.load.audio('explosion_sound', '../Web-Deluxema/includes/Sounds/Effects/Missile_Explosion.wav');
 	this.game.load.audio('fire_sound', '../Web-Deluxema/includes/Sounds/Effects/Missile_Fire.wav');
+	
+	// Load the explosion
+	this.explosion.preload();
 };
 
 Missile.prototype.create = function()
@@ -55,7 +60,7 @@ Missile.prototype.create = function()
 	this.sprite.anchor.setTo(.5, .5);
 	
 	// Adjust the body size
-	this.sprite.body.setSize(28, 76, 0, 0);
+	this.sprite.body.setSize(80, 24, 0, 0);
 
 	this.sprite.scale.x = 1;
 
@@ -74,61 +79,110 @@ Missile.prototype.create = function()
 	this.firing_sound = this.game.add.audio('fire_sound', 0.3);
 	this.explosion_sound = this.game.add.audio('explosion_sound', 0.5);
 	
+	// Add the explosion
+	this.explosion.create();
 };
+
+Missile.prototype.reset_missile = function()
+{
+	this.warned = false;
+	this.preparing = false;
+	this.firing = false;
+	this.exploding = false;
+	this.explode_playing = false;
+	this.sprite.exists = false;
+	this.destroyed = false;
+	this.sprite.angle = 0;
+	this.sprite.body.velocity.x = 0;
+	this.sprite.body.velocity.y = 0;
+	this.sprite.body.gravity.y = 0;
+};
+
+Missile.prototype.handle_firing = function()
+{
+	this.sprite.body.velocity.x = 0;
+	if(this.exploding)
+	{
+		if(this.explode_playing && this.exploding_ref.isFinished)
+		{
+			this.reset_missile();
+		}
+		else if(!this.explode_playing)
+		{
+			this.explosion_sound.play();
+			this.explode_playing = true;
+			this.exploding_ref = this.sprite.animations.play('explode');
+		}
+	}
+	else if(!this.warned)
+	{
+		this.warning_sound.onStop.addOnce(function() {
+			this.warned = true;
+			this.warning.exists = false;
+			this.sprite.exists = true;
+			this.firing_sound.play();
+		}, this);
+		this.sprite.x = -80;
+		this.sprite.y = 186;
+		this.warning.x = 40;
+		this.warning.y = 156;
+		if(this.sprite.scale.x == 1)
+		{
+			this.warning.x = 960;
+			this.sprite.x = 1080;
+		}
+		this.warning.exists = true;
+		this.warning.animations.play('warn');
+	}
+	else
+	{
+		this.sprite.animations.play('firing');
+		this.sprite.body.velocity.x = 500 * this.sprite.scale.x * -1;
+		
+		if(Phaser.Rectangle.intersects(this.sprite.body, main_game.mirror.sprite.body))
+		{
+			this.exploding = true;
+			main_game.mirror.life += 1;
+		}
+	}
+}
 
 Missile.prototype.in_game = function()
 {
 	if(this.firing)
 	{
-		this.sprite.body.velocity.x = 0;
-		if(this.exploding)
+		if(!this.destroyed && this.warned && !this.exploding && Phaser.Rectangle.intersects(this.sprite.body, main_game.ace.attack.body) && main_game.ace.attacking)
 		{
-			if(this.explode_playing && this.exploding_ref.isFinished)
-			{
-				this.warned = false;
-				this.preparing = false;
-				this.firing = false;
-				this.exploding = false;
-				this.explode_playing = false;
-				this.sprite.exists = false;
-			}
-			else if(!this.explode_playing)
-			{
-				this.explosion_sound.play();
-				this.explode_playing = true;
-				this.exploding_ref = this.sprite.animations.play('explode');
-			}
+			this.destroyed = true;
+			this.spin = 12 * main_game.ace.sprite.scale.x;
+			this.sprite.body.gravity.y = 800;
+			this.sprite.body.velocity.y = -400;
+			this.sprite.body.velocity.x = 200 * main_game.ace.sprite.scale.x;
+			this.explosion_sound.play();
+			main_game.game_score++;
 		}
-		else if(!this.warned)
+		else if(this.destroyed)
 		{
-			this.warning_sound.onStop.addOnce(function() {
-				this.warned = true;
-				this.warning.exists = false;
-				this.sprite.exists = true;
-				this.firing_sound.play();
-			}, this);
-			this.warning.x = 40;
-			this.sprite.x = -80;
-			this.warning.y = 156;
-			if(this.sprite.scale.x == 1)
+			// Play the explosion of the destroyed missile
+			if(this.explosion.is_finished())
+				this.explosion.initiate_explosion(this.sprite.body.x, 
+																					this.sprite.body.x + this.sprite.body.width, 
+																					this.sprite.body.y, 
+																					this.sprite.body.y + this.sprite.body.height);
+			this.explosion.update(this.sprite.body.x, 
+														this.sprite.body.x + this.sprite.body.width, 
+														this.sprite.body.y, 
+														this.sprite.body.y + this.sprite.body.height);
+														
+			this.sprite.animations.play('destroyed');
+			this.sprite.angle += this.spin;
+			if(this.sprite.body.touching.down)
 			{
-				this.warning.x = 960;
-				this.sprite.x = 1080;
+				this.reset_missile();
 			}
-			this.warning.exists = true;
-			this.warning.animations.play('warn');
 		}
 		else
-		{
-			this.sprite.animations.play('firing');
-			this.sprite.body.velocity.x = 500 * this.sprite.scale.x * -1;
-			
-			if(Phaser.Rectangle.intersects(this.sprite.body, main_game.mirror.sprite.body))
-			{
-				this.exploding = true;
-				main_game.mirror.life += 1;
-			}
-		}
+			this.handle_firing();
 	}
 	else if(!this.preparing)
 	{
@@ -150,6 +204,7 @@ Missile.prototype.in_game = function()
 
 Missile.prototype.update = function()
 {
+	this.game.physics.arcade.collide(this.sprite, main_game.level.platform);
 	if(main_game.game_state == state.GAME)
 	{
 		this.in_game();
