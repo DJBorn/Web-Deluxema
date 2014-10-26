@@ -7,12 +7,16 @@ var main_game = {
 	hud: null,
 	game_state: null,
 	robot_amount: 15,
-	game_score: 0
+	game_score: 0,
+	close: false
+};
+function close_deluxema() {
+	main_game.close = true;
 };
 
 function deluxema(){
 	var game = new Phaser.Game(1000, 400, Phaser.AUTO, 'stage', { preload: preload, create: create, update: update, render: render });
-
+	
 	function preload () {
 		game.time.advancedTiming = true;
 		game.stage.smoothed = false;
@@ -50,6 +54,11 @@ function deluxema(){
 	
 	function update ()
 	{
+		if(main_game.close)
+		{
+			main_game.close = false;
+			game.destroy();
+		}
 		adjust_difficulty();
 		main_game.level.update();
 		main_game.mirror.update();
