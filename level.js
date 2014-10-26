@@ -6,7 +6,7 @@ function Level(game) {
 	this.explosion_left = new Explosion(game);
 	this.explosion_right = new Explosion(game);
 	this.timer = null;
-	this.timer_begin = false;
+	this.timer_began = false;
 };
 
 Level.prototype.preload = function() {
@@ -36,12 +36,6 @@ Level.prototype.create = function() {
 	// Create the explosion for the initial animation
 	this.explosion_left.create();
 	this.explosion_right.create();
-	
-	// Create the timer for the explosions
-	this.timer = this.game.time.create();
-	
-	// Set a TimerEvent to occur after 2 seconds
-	this.timer.loop(2500, function(){main_game.game_state = state.PREPARATION;}, this);
 
 	// Scale the size (initial image is a 1x1 block)
 	ground.scale.setTo(1, 1);
@@ -56,9 +50,18 @@ Level.prototype.create = function() {
 Level.prototype.update = function() {
 	if(main_game.game_state == state.EXPLOSION)
 	{
-		// Start the timer
-		this.timer.start();
+		if(!this.timer_began)
+		{
+			this.timer_began = true;
+	
+			// Create the timer for the dash
+			this.timer = this.game.time.create();
 			
+			this.timer.add(2500, function(){main_game.game_state = state.PREPARATION;}, this);
+			
+			this.timer.start();
+		}
+		
 		if(this.explosion_left.is_finished())
 			this.explosion_left.initiate_explosion(0, 8, 152, 222);
 		if(this.explosion_right.is_finished())
@@ -71,5 +74,10 @@ Level.prototype.update = function() {
 		this.timer_began = false;
 		this.house_breached.exists = true;
 		this.house.exists = false;
+	}
+	if(main_game.game_state == state.MENU)
+	{
+		this.house_breached.exists = false;
+		this.house.exists = true;
 	}
 };

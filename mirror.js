@@ -65,5 +65,11 @@ Mirror.prototype.update = function()
 {
 	this.oscillate();
 	this.sprite.animations.play('mirror'+this.life);
+	if(main_game.game_state != state.GAMEOVER && this.life == 5)
+	{
+		main_game.game_state = state.GAMEOVER;
+		if(main_game.game_score > localStorage.getItem("high_score"))
+			localStorage.setItem("high_score", main_game.game_score);
+	}
 };
 	

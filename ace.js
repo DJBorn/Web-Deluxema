@@ -37,10 +37,14 @@ function Ace(game) {
 	this.hurt_sound = null;
 	this.portal_played = false;
 	this.grab_played = false;
+	
+	this.test = false;
 };
 
 Ace.prototype.input = function(key)
 {
+	if(main_game.game_state == state.GAMEOVER)
+		return false;
 	// Make sure the input can only be detected once on key down to prevent chained input events
 	if(key == "x")
 	{
@@ -66,6 +70,10 @@ Ace.prototype.input = function(key)
 		this.jump_button_pressed = false;
 		return false;
 	}
+	if(key == "left")
+		return this.cursors.left.isDown;
+	if(key == "right")
+		return this.cursors.right.isDown;
 };
 
 Ace.prototype.preload = function() {
@@ -144,6 +152,19 @@ Ace.prototype.create = function() {
 	this.enter_button = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
 };
 
+Ace.prototype.reset = function()
+{
+	this.waking = false;
+	this.preparing = false;
+	this.portal_played = false;
+	this.grab_played = false;
+	this.sprite.scale.x = -1;
+	this.sprite.x = 498;
+	this.sprite.y = 348;
+	this.sprite.body.velocity.x = 0;
+	this.sprite.body.velocity.y = 0;
+}
+
 // This function handles Ace when he is sleeping
 Ace.prototype.sleeping = function()
 {
@@ -171,7 +192,9 @@ Ace.prototype.standing_up = function()
 	if(this.preparing)
 	{
 		if(this.preparing_ref.isFinished)
+		{
 			main_game.game_state = state.GAME;
+		}
 		else if(this.preparing_ref.frame == 45 && !this.portal_played)
 		{
 			this.portal_played = true;
@@ -206,6 +229,7 @@ Ace.prototype.is_hurt = function()
 			this.sprite.body.velocity.y = -650;
 			this.sprite.body.velocity.x = 300 * main_game.robots[i].sprite.scale.x;
 			this.hurt = true;
+			this.attacking = false;
 			this.hurt_sound.play();
 		}
 	}
@@ -271,7 +295,7 @@ Ace.prototype.in_game = function()
 		this.slicing = true;
 		this.slice_sound.play();
 	}
-	else if(this.cursors.left.isDown || this.cursors.right.isDown)
+	else if(this.input("left") || this.input("right"))
 	{
 		this.sprite.animations.play('run');
 	}
@@ -284,13 +308,13 @@ Ace.prototype.in_game = function()
 	// movement handler
 	if(!this.slicing)
 	{
-		if(this.cursors.left.isDown)
+		if(this.input("left"))
 		{
 			this.sprite.body.velocity.x = -250;
 			if(!this.air_slicing)
 				this.sprite.scale.x = -1;
 		}
-		else if(this.cursors.right.isDown)
+		else if(this.input("right"))
 		{
 			this.sprite.body.velocity.x = 250;
 			if(!this.air_slicing)
@@ -308,18 +332,18 @@ Ace.prototype.update = function()
 	// Collide ace with the platform no matter what state
 	this.game.physics.arcade.collide(this.sprite, main_game.level.platform);
 	
-	if(main_game.game_state == state.GAME)
-	{
-		this.is_hurt();
-		if(!this.hurt)
-			this.in_game();
-	}
-	else if(main_game.game_state == state.MENU)
+	if(main_game.game_state == state.MENU || main_game.game_state == state.RESULT)
 		this.sleeping();
 	else if(main_game.game_state == state.EXPLOSION)
 		this.waking_up();
 	else if(main_game.game_state == state.PREPARATION)
 		this.standing_up();
+	else
+	{
+		this.is_hurt();
+		if(!this.hurt)
+			this.in_game();
+	}
 };
 
 

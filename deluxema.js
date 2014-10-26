@@ -29,9 +29,6 @@ function deluxema(){
 			main_game.robots[i] = new Robot(game);
 			main_game.robots[i].preload();
 		}
-		main_game.robots[0].active = true;
-		main_game.robots[1].active = true;
-		main_game.robots[2].active = true;
 		main_game.ace = new Ace(game);
 		main_game.ace.preload();
 		main_game.hud = new HUD(game);
@@ -53,7 +50,7 @@ function deluxema(){
 	
 	function update ()
 	{
-		robot_activation();
+		adjust_difficulty();
 		main_game.level.update();
 		main_game.mirror.update();
 		main_game.missile.update();
@@ -65,7 +62,7 @@ function deluxema(){
 		main_game.hud.update();
 	}
 	
-	function render () {
+	function render () {/*
     game.debug.text(game.time.fps, 2, 14, "#00ff00");
 		game.debug.body(main_game.ace.sprite);
 		game.debug.body(main_game.ace.attack);
@@ -75,6 +72,6 @@ function deluxema(){
 		{
 			game.debug.body(main_game.robots[i].sprite);
 			game.debug.body(main_game.robots[i].attack);
-		}
+		}*/
 	}
 }

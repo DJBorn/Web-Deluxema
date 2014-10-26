@@ -14,7 +14,6 @@ function Missile(game)
 	this.explode_playing = false;
 	this.warned = false;
 	this.destroyed = false;
-	CC = null;
 	this.exploding_ref = null;
 	
 	this.explosion = new Explosion(game);
@@ -28,7 +27,7 @@ function Missile(game)
 	this.firing_timer = null;
 	
 	// Settings
-	this.difficulty = 3000;
+	this.difficulty = 0;
 };
 
 Missile.prototype.preload = function()
@@ -72,7 +71,7 @@ Missile.prototype.create = function()
 	
 	this.sprite.animations.add('destroyed', [16], true);
 	
-	this.warning.animations.add('warn', [0, 1], 5, true);
+	this.warning.animations.add('warn', [0, 1], 4, true);
 	
 	// Add the sounds
 	this.warning_sound = this.game.add.audio('warning_sound', 0.1);
@@ -205,7 +204,7 @@ Missile.prototype.in_game = function()
 Missile.prototype.update = function()
 {
 	this.game.physics.arcade.collide(this.sprite, main_game.level.platform);
-	if(main_game.game_state == state.GAME)
+	if(main_game.game_state == state.GAME || this.exploding)
 	{
 		this.in_game();
 	}

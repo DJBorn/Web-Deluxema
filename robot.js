@@ -100,6 +100,15 @@ Robot.prototype.create = function() {
 	this.explosion.create();
 };
 
+Robot.prototype.reset = function()
+{
+	this.active = false;
+	this.sprite.x = -100 + (1200 * this.game.rnd.between(0, 1));
+	this.sprite.y = 390;
+	this.sprite.body.velocity.x = 0;
+	this.sprite.body.velocity.y = 0;
+};
+
 Robot.prototype.dash = function()
 {
 	if(!this.duration_started)
@@ -172,7 +181,7 @@ Robot.prototype.adjust_direction = function()
 
 Robot.prototype.in_game = function()
 {
-	if(main_game.game_state == state.GAME)
+	if(main_game.game_state == state.GAME || main_game.game_state == state.GAMEOVER)
 	{	
 		// Check if the robot was hit by ace
 		if(Phaser.Rectangle.intersects(this.sprite.body, main_game.ace.attack.body) && main_game.ace.attacking && !this.destroyed)
@@ -211,14 +220,14 @@ Robot.prototype.in_game = function()
 			{
 				this.sprite.animations.play('stand');
 			
-				if(!this.dash_started)
+				if(!this.dash_started && main_game.game_state == state.GAME)
 				{
 					this.dash_started = true;
 			
 					// Create the timer for the dash
 					this.dash_timer = this.game.time.create();
 					
-					// Set the delay so the robot will dash between 2 to 6 seconds
+					// Set the delay so the robot will dash between 1 to 4 seconds
 					this.dash_timer.add(this.game.rnd.between(1000, 4000), function(){this.dash_started = false; this.move = true; this.dash_sound.play(); }, this);
 					
 					this.dash_timer.start();
