@@ -12,10 +12,18 @@ function reset_game()
 	main_game.mirror.life = 1;
 	main_game.hud.reset();
 	main_game.ace.reset();
+	for(var i = 0; i < main_game.robot_amount; i++)
+	{
+		main_game.robots[i].reset();
+	}
 }
 
 function adjust_difficulty()
 {
+	for(var i = 0; i < main_game.robot_amount; i++)
+	{
+		main_game.robots[i].active = false;
+	}
 	if(main_game.game_score == 0)
 		main_game.missile.difficulty = 2000;
 	if(main_game.game_score > 0)

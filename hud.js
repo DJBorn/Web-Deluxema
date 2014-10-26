@@ -227,10 +227,6 @@ HUD.prototype.update = function()
 				this.result.alpha = 0;
 				this.result_fading = false;
 				main_game.game_score = 0;
-				for(var i = 0; i < main_game.robot_amount; i++)
-				{
-					main_game.robots[i].reset();
-				}
 			}
 		}
 	}
