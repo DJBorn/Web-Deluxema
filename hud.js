@@ -24,6 +24,8 @@ function HUD(game) {
 	
 	this.start_sound = null;
 	this.start_sound_played = false;
+	
+	this.enter_button = null;
 };
 
 HUD.prototype.toggle_enter = function()
@@ -104,6 +106,9 @@ HUD.prototype.create = function()
 	
 	// Create the start sound
 	this.start_sound = this.game.add.audio('start_sound', 0.5);
+	
+	// Create the enter button handler
+	this.enter_button = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
 };
 
 HUD.prototype.reset = function()
@@ -167,6 +172,8 @@ HUD.prototype.update = function()
 		
 		this.handle_sparkle();
 		this.high_score.text = "High Score: " + localStorage.getItem("high_score");
+		if(this.enter_button.isDown)
+			main_game.game_state = state.EXPLOSION;
 	}
 	else if(main_game.game_state == state.EXPLOSION)
 	{
@@ -184,6 +191,12 @@ HUD.prototype.update = function()
 		this.press_enter.text = "PRESS ENTER";
 		this.press_enter.alpha -= 0.02;
 		this.controls.alpha -= 0.02;
+		if(this.title.alpha >= 1)
+			this.title.alpha = 1;
+		if(this.press_enter.alpha >= 1)
+			this.press_enter.alpha = 1;
+		if(this.controls.alpha >= 1)
+			this.controls.alpha = 1;
 	}
 	
 	if(main_game.game_state == state.GAME)
@@ -195,6 +208,7 @@ HUD.prototype.update = function()
 		this.fade.alpha += 0.008;
 		if(this.fade.alpha >= 1)
 		{
+			this.fade.alpha = 1;
 			reset_game();
 			main_game.game_state = state.RESULT;
 			this.result.alpha = 1;
@@ -212,7 +226,7 @@ HUD.prototype.update = function()
 			// Create the timer for the dash
 			this.result_timer = this.game.time.create();
 			
-			// Set the delay so the robot will dash between 1 to 4 seconds
+			// Set the delay
 			this.result_timer.add(3000, function(){this.result_fading = true;}, this);
 			
 			this.result_timer.start();
@@ -227,6 +241,8 @@ HUD.prototype.update = function()
 				this.result.alpha = 0;
 				this.result_fading = false;
 				main_game.game_score = 0;
+				main_game.game_state = state.MENU;
+				this.showing_results = false;
 			}
 		}
 	}

@@ -14,7 +14,6 @@ function Ace(game) {
 	this.jump_button_pressed = false;
 	this.attack_button = null;
 	this.attack_button_pressed = false;
-	this.enter_button = null;
 	
 	// Animation state handlers
 	this.waking = false;
@@ -149,7 +148,6 @@ Ace.prototype.create = function() {
 	this.cursors = this.game.input.keyboard.createCursorKeys();
 	this.jump_button = this.game.input.keyboard.addKey(Phaser.Keyboard.Z);
 	this.attack_button = this.game.input.keyboard.addKey(Phaser.Keyboard.X);
-	this.enter_button = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
 };
 
 Ace.prototype.reset = function()
@@ -169,8 +167,6 @@ Ace.prototype.reset = function()
 Ace.prototype.sleeping = function()
 {
 	this.sprite.animations.play('sleeping');
-	if(this.enter_button.isDown)
-		main_game.game_state = state.EXPLOSION;
 };
 
 // This function handles Ace when he is waking up from the explosion

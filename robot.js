@@ -107,6 +107,7 @@ Robot.prototype.reset = function()
 	this.sprite.y = 390;
 	this.sprite.body.velocity.x = 0;
 	this.sprite.body.velocity.y = 0;
+	this.first_dash = true;
 };
 
 Robot.prototype.dash = function()

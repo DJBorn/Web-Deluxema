@@ -75,7 +75,7 @@ Level.prototype.update = function() {
 		this.house_breached.exists = true;
 		this.house.exists = false;
 	}
-	if(main_game.game_state == state.MENU)
+	if(main_game.game_state == state.RESULT)
 	{
 		this.house_breached.exists = false;
 		this.house.exists = true;
