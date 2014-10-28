@@ -52,7 +52,8 @@ Explosion.prototype.initiate_explosion = function(x1, x2, y1, y2) {
 	this.sound[0].play();
 };
 
-Explosion.prototype.play_explosion = function(x1, x2, y1, y2) {
+Explosion.prototype.finish_explosion = function()
+{
 	for(var i = 0; i < 5; i++)
 	{
 		if(this.playing[i])
@@ -64,6 +65,10 @@ Explosion.prototype.play_explosion = function(x1, x2, y1, y2) {
 			}
 		}
 	}
+}
+
+Explosion.prototype.play_explosion = function(x1, x2, y1, y2) {
+	this.finish_explosion();
 	for(var i = 0; i < 5; i++)
 	{
 		if(!this.playing[i] && this.playing[(i+1)%5] && this.animation_ref[(i+1)%5].frame == 3)

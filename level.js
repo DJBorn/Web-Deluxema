@@ -71,6 +71,8 @@ Level.prototype.update = function() {
 	}
 	if(main_game.game_state == state.PREPARATION)
 	{
+		this.explosion_left.finish_explosion();
+		this.explosion_right.finish_explosion();
 		this.timer_began = false;
 		this.house_breached.exists = true;
 		this.house.exists = false;
