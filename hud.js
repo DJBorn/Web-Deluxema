@@ -181,6 +181,8 @@ HUD.prototype.update = function()
 		{
 			this.sparkle[i].angle += 8;
 			this.sparkle[i].alpha -= 0.02;
+			if(this.sparkle[i].alpha <= 0)
+				this.sparkle[i].alpha = 0;
 		}
 		if(!this.start_sound_played)
 		{
@@ -191,12 +193,12 @@ HUD.prototype.update = function()
 		this.press_enter.text = "PRESS ENTER";
 		this.press_enter.alpha -= 0.02;
 		this.controls.alpha -= 0.02;
-		if(this.title.alpha >= 1)
-			this.title.alpha = 1;
-		if(this.press_enter.alpha >= 1)
-			this.press_enter.alpha = 1;
-		if(this.controls.alpha >= 1)
-			this.controls.alpha = 1;
+		if(this.title.alpha <= 0)
+			this.title.alpha = 0;
+		if(this.press_enter.alpha <= 0)
+			this.press_enter.alpha = 0;
+		if(this.controls.alpha <= 0)
+			this.controls.alpha = 0;
 	}
 	
 	if(main_game.game_state == state.GAME)
