@@ -156,6 +156,7 @@ Ace.prototype.reset = function()
 	this.preparing = false;
 	this.portal_played = false;
 	this.grab_played = false;
+	this.hurt = false;
 	this.sprite.scale.x = -1;
 	this.sprite.x = 498;
 	this.sprite.y = 348;
@@ -334,6 +335,11 @@ Ace.prototype.update = function()
 		this.waking_up();
 	else if(main_game.game_state == state.PREPARATION)
 		this.standing_up();
+	else if(main_game.game_state == state.GAMEOVER)
+	{
+		this.hurt = false;
+		this.in_game();
+	}
 	else
 	{
 		this.is_hurt();
