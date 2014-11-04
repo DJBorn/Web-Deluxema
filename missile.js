@@ -20,6 +20,8 @@ function Missile(game)
 	
 	// Sounds
 	this.warning_sound = null;
+	this.warning_played = false;
+	this.warning_timer = null;
 	this.explosion_sound = null;
 	this.firing_sound = null;
 	
@@ -115,12 +117,24 @@ Missile.prototype.handle_firing = function()
 	}
 	else if(!this.warned)
 	{
-		this.warning_sound.onStop.addOnce(function() {
-			this.warned = true;
-			this.warning.exists = false;
-			this.sprite.exists = true;
-			this.firing_sound.play();
-		}, this);
+		if(!this.warning_played)
+		{
+			this.warning_played = true;
+	
+			// Create the timer for the dash
+			this.warning_timer = this.game.time.create();
+			
+			// Set the delay so the robot will dash between 1 to 4 seconds
+			this.warning_timer.add(1800, function() {
+																		this.warned = true;
+																		this.warning_played = false;
+																		this.warning.exists = false;
+																		this.sprite.exists = true;
+																		this.firing_sound.play();
+																	 }, this);
+																		
+			this.warning_timer.start();
+		}
 		this.sprite.x = -80;
 		this.sprite.y = 186;
 		this.warning.x = 40;
