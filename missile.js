@@ -135,6 +135,7 @@ Missile.prototype.handle_firing = function()
 																		
 			this.warning_timer.start();
 		}
+		this.sprite.exists = true;
 		this.sprite.x = -80;
 		this.sprite.y = 186;
 		this.warning.x = 40;
