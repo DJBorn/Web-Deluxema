@@ -92,7 +92,7 @@ HUD.prototype.create = function()
 	this.press_enter = this.game.add.text(this.game.world.centerX, 270, "PRESS ENTER", this.style);
 	this.press_enter.anchor.setTo(0.5, 0.5);
 	
-	this.controls = this.game.add.text(this.game.world.centerX, 390, "Z: Jump  X: Attack  Arrows: Run", this.style);
+	this.controls = this.game.add.text(this.game.world.centerX, 390, "Space: Jump  X: Attack  Arrows: Run", this.style);
 	this.controls.anchor.setTo(0.5, 0.5);
 	
 	this.score = this.game.add.text(this.game.world.width/3, 0, "", this.style);

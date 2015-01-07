@@ -146,7 +146,7 @@ Ace.prototype.create = function() {
 	
 	// Create the input handlers
 	this.cursors = this.game.input.keyboard.createCursorKeys();
-	this.jump_button = this.game.input.keyboard.addKey(Phaser.Keyboard.Z);
+	this.jump_button = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 	this.attack_button = this.game.input.keyboard.addKey(Phaser.Keyboard.X);
 };
 
