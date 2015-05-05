@@ -5,6 +5,7 @@ var main_game = {
 	missile: null,
 	level: null,
 	hud: null,
+	soundtrack: null,
 	game_state: null,
 	robot_amount: 15,
 	game_score: 0,
@@ -37,6 +38,8 @@ function deluxema(){
 		main_game.ace.preload();
 		main_game.hud = new HUD(game);
 		main_game.hud.preload();
+		main_game.soundtrack = new Soundtrack(game);
+		main_game.soundtrack.preload();
 	}
 
 	function create ()
@@ -50,6 +53,7 @@ function deluxema(){
 		}
 		main_game.ace.create();
 		main_game.hud.create();
+		main_game.soundtrack.create();
 	}
 	
 	function update ()
@@ -69,6 +73,7 @@ function deluxema(){
 		}
 		main_game.ace.update();
 		main_game.hud.update();
+		main_game.soundtrack.update();
 	}
 	
 	function render () {/*
