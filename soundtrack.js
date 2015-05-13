@@ -6,20 +6,18 @@ function Soundtrack(game) {
 	this.main_theme = null;
 	
 	this.main_theme_start = false;
-	
-	this.main_theme_fading = false;
 };
 
 Soundtrack.prototype.preload = function()
 {
-	// Load the sprite sheet of the mirror
+	// Load the main theme file
 	this.game.load.audio('main_theme', '../Web-Deluxema/includes/Sounds/Music/[10] Voile Magic Library.mp3');
 	
 };
 
 Soundtrack.prototype.create = function()
 {
-	// Create an instance of the sprite using the ace sprite sheet
+	// Create an instance of the main theme
 	this.main_theme = this.game.add.audio('main_theme');
 	
 };
@@ -29,18 +27,16 @@ Soundtrack.prototype.update = function()
 	if(main_game.game_state == state.MENU)
 	{
 		this.main_theme_start = false;
-		this.main_theme.fading = false;
 	}
 	if(main_game.game_state == state.GAME && !this.main_theme_start)
 	{
 		this.main_theme_start = true;
-		this.main_theme.play('', 0, 0.2, true, true);
+		this.main_theme.loopFull(0.2);
 	}
 	
-	if(main_game.game_state == state.GAMEOVER && !this.main_theme_fading)
+	if(main_game.game_state == state.RESULT)
 	{
-		this.main_theme_fading = true;
-		this.main_theme.fadeOut(2000);
+		this.main_theme.stop();
 	}
 };
 	

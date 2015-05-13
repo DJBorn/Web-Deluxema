@@ -192,7 +192,9 @@ Robot.prototype.in_game = function()
 			this.destroyed = true;
 			this.first_dash = true;
 			this.death_sound.play();
-			main_game.game_score++;
+			// If the game is over then do not give any more points
+			if(main_game.game_state == state.GAME)
+				main_game.game_score++;
 		}
 		
 		else if(this.destroyed)
@@ -200,13 +202,13 @@ Robot.prototype.in_game = function()
 			this.sprite.animations.play('death');
 			if(this.explosion.is_finished())
 				this.explosion.initiate_explosion(this.sprite.body.x, 
-																					this.sprite.body.x + this.sprite.body.width, 
-																					this.sprite.body.y, 
-																					this.sprite.body.y + this.sprite.body.height);
+												  this.sprite.body.x + this.sprite.body.width, 
+												  this.sprite.body.y, 
+												  this.sprite.body.y + this.sprite.body.height);
 			this.explosion.update(this.sprite.body.x, 
-														this.sprite.body.x + this.sprite.body.width, 
-														this.sprite.body.y, 
-														this.sprite.body.y + this.sprite.body.height);
+								  this.sprite.body.x + this.sprite.body.width, 
+								  this.sprite.body.y, 
+								  this.sprite.body.y + this.sprite.body.height);
 			if(this.sprite.body.touching.down)
 			{
 				this.destroyed = false;
