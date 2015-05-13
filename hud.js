@@ -192,18 +192,21 @@ HUD.prototype.update = function()
 		this.title.alpha -= 0.02;
 		this.press_enter.text = "PRESS ENTER";
 		this.press_enter.alpha -= 0.02;
-		this.controls.alpha -= 0.02;
 		if(this.title.alpha <= 0)
 			this.title.alpha = 0;
 		if(this.press_enter.alpha <= 0)
 			this.press_enter.alpha = 0;
-		if(this.controls.alpha <= 0)
-			this.controls.alpha = 0;
 	}
 	
 	if(main_game.game_state == state.GAME)
 	{
 		this.score.text = "Score: " + main_game.game_score;
+		if(main_game.game_score > 0)
+		{
+			this.controls.alpha -= 0.02;
+			if(this.controls.alpha <= 0)
+				this.controls.alpha = 0;
+		}
 	}
 	if(main_game.game_state == state.GAMEOVER)
 	{
